@@ -1,8 +1,8 @@
-MSF Analysis of Delayed Systems
+# MSF Analysis of Delayed Systems
 Codes for MSF analysis for delayed coupled systems with examples in Stuart-Landau oscillators and the Lang-Kobayashi model for coupled lasers.
 See the references below for more details.
 
-Usage 
+# Usage 
 - `StuartLandau` : This folder contains the routines to generate the MSF surface landscape (`LK_NonDelayed.m`, `LK_SemiDiffusive.m`, `LK_DelayedDiffusive.m`  ) and the study of the dependence of the region of stability in the coupling strength (`SL_DepthSize.m`) for the Stuart-Landau with identical indegrees.
 
 - `LangKobayashi` : This folder contains the routines to generate the MSF surface landscape (`LK_NonDiffusive.m`) and the study of the dependence of the region of stability in the coupling strength (`LK_DepthSize.m`) for the Lang-Kobayashi with identical indegrees.
@@ -13,13 +13,13 @@ Usage
 
 - All codes were tested and run in MATLAB 2024b. To run the codes, download all files in this repository to a folder of your choice and run one of the scripts of the main folder. All codes generate/include the required data to run the simulations and optimization; simulations can take a few minutes on a standard laptop.
 
-License
+# License
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 The full text of the GNU General Public License can be found in the file "LICENSE.txt".
 
-References
+# References
 1. AED Barioni, AN Montanari, AE Motter. Master stability with delays favors heterogeneous optimal networks. (2026)
 2. K Engelborghs, T Luzyanina, D Roose. Numerical bifurcation analysis of delay differential equations using DDE-BIFTOOL. ACM Transactions on Mathematical Software, 28:1-21 (2002).
