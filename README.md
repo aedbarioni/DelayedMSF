@@ -21,5 +21,5 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 The full text of the GNU General Public License can be found in the file "LICENSE.txt".
 
 # References
-1. AED Barioni, AN Montanari, AE Motter. Master stability with delays favors heterogeneous optimal networks. (2026)
+1. AED Barioni, AN Montanari, AE Motter. Generalized master stability of heterogeneous time-delay networks. (2026)
 2. K Engelborghs, T Luzyanina, D Roose. Numerical bifurcation analysis of delay differential equations using DDE-BIFTOOL. ACM Transactions on Mathematical Software, 28:1-21 (2002).
