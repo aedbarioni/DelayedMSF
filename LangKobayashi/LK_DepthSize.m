@@ -148,7 +148,7 @@ function [sizeXi,deepXi] = XiChar(deg,coup_str,neig,tau,M,M1,M2,M3)
             if (ii == 36 && jj ==27)
                 disp("stop")
             end
-            mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau,M);
+            mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau);
         end
     end
     deepXi = min(min(mtle));

@@ -105,7 +105,7 @@ for ii = 1:m
     ii
     parfor jj = 1:m
         J2 = (Re_alpha(ii) + 1i*Im_beta(jj))*(coup_str/neig)*M3;
-        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau,M);
+        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau);
     end
 end
 
