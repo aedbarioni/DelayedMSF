@@ -66,7 +66,7 @@ for ii = 1:m
         %     disp('stop')
         % end
         J2 = K*(alpha(ii) + 1i*beta(jj))*Rtau;
-        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau,1); 
+        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau); 
     end
 end
 

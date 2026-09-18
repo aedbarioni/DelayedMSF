@@ -110,7 +110,7 @@ function [sizeXi,deepXi] = XiChar(mu,K,tau,M,P,R0,Rtau)
     for ii = 1:m    
         for jj = 1:m
             J2 = (Re_alpha(ii) + 1i*Im_beta(jj))*K*Rtau;
-            mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau,M);
+            mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau);
         end
     end
     deepXi = min(min(mtle));

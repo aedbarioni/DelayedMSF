@@ -63,7 +63,7 @@ for ii = 1:m
     ii
     parfor jj = 1:m
         J2 = -(alpha(ii) + 1i*beta(jj))*Rtau;
-        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau,1); 
+        mtle(jj,ii) = dde_rightmost_eig(J1,J2,tau); 
     end
 end
 
