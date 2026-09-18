@@ -1,4 +1,3 @@
-%% Optimization of Adjacency matrix to minimize the Lyapunov exponent
 % This code optimizes the adjacency matrix with the constraint that the the
 % sum of all the entries of the matrix remains constant
 

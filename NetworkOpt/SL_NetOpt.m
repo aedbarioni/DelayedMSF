@@ -51,7 +51,7 @@ r = r0_ini(1:M); Omega = Omega0; delta = zeros(M,1);
 
 % Initial mtle 
 [J1,J2] = Jac_SL_hetnet(param,adj,r,Omega,delta,tau);
-mtle_0 = dde_rightmost_eig(J1,J2,tau,M);
+mtle_0 = dde_rightmost_eig(J1,J2,tau);
 disp(mtle_0)
 
 %%%%%--- Defining the perturbation variables ---%%%%%
@@ -248,7 +248,7 @@ end
 
 if found == 1 % sync state identified successfully
     [J1,J2] = Jac_SLtau_hetnet(param,adj_h,r,Omega,delta,tau);
-    mtle = dde_rightmost_eig(J1,J2,tau,M);
+    mtle = dde_rightmost_eig(J1,J2,tau);
 else % no sync state found
     mtle = Inf;
 end
@@ -315,7 +315,7 @@ end
 
 if found == 1 % sync state identified successfully
     [J1,J2] = Jac_SLtau_hetnet(param,adj_h,r,Omega,delta,tau);
-    mtle = dde_rightmost_eig(J1,J2,tau,M);
+    mtle = dde_rightmost_eig(J1,J2,tau);
 else % no sync state found
     mtle = Inf;
 end
