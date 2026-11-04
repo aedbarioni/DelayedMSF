@@ -2,7 +2,7 @@
 % This code calculates the maximum Lyapunov exponent corresponding to
 % complex eigenvalues of the Laplacian matrix that couples the system and
 % plots a colormap where blue represents the negative (stable) Lyapunov 
-% exponents and red the posive ones (unstable)
+% exponents and red the positive ones (unstable)
 
 % clear all; close all; clc;
 
@@ -117,8 +117,8 @@ save(filename)
 figure();
 
 imagesc(mtle(end:-1:1, 1:end)) % Flip vertically and exclude extra column
-xlabel('\alpha')
-ylabel('\beta')
+xlabel('Re(\nu)')
+ylabel('Im(\nu)')
 % Compose the title with variables
 title(sprintf('Lyapunov Exponent (\\indegree = %.3f, fracNeg = %.3f)', deg, fraction_negatives));
 
