@@ -1,9 +1,9 @@
-% SLdelayeddiffusive
+% SL_DelayedDiffusive
 %% MSF landscape for delayed diffusive Stuart-Landau oscillators
 % This code calculates the maximum Lyapunov exponent corresponding to
 % complex eigenvalues of the Laplacian matrix that couples the system and
 % plots a colormap where blue represents the negative (stable) Lyapunov 
-% exponents and red the posive ones (unstable)
+% exponents and red the positive ones (unstable)
 
 % clear all; close all; clc;
 
@@ -18,7 +18,7 @@ tau =  input('tau: '); %  %0.5; % 1.8*pi; %%% Modified
 %%%%%--- Setting up the paralelizing ---%%%%%
 poolobj = gcp('nocreate');
 delete(poolobj);
-ncores = 6; % input('Number of cores: ')
+ncores = input('Number of cores: ');
 parpool(ncores);
 
 
@@ -27,14 +27,10 @@ param.lambda = lambda;
 param.omega = omega;
 param.gamma = gamma;
 param.tau = tau;
-% param.mu = mu;
-% param.kmu = kmu;
 
-% finding the sync solution
-f_omega = @(x) f_omega_aux(x,param);
 
 %% Fixed point
-Omega0 = omega - lambda*gamma;  % omega is the initial guess
+Omega0 = omega - lambda*gamma;  
 
 % === Compute phi and r2 ===
 phi = -Omega0 * tau;
@@ -51,8 +47,8 @@ Rtau = [cos(phi) -r0*sin(phi);
 
 J1 = P;
 
-re_range = 20;
-im_range = 10;
+re_range = 25;
+im_range = 25;
 m = 200;
 alpha = linspace(-re_range,re_range,m);
 beta = linspace(-im_range,im_range,m);
@@ -78,8 +74,8 @@ runtime = toc
 figure();
 
 imagesc(mtle(end:-1:1, 1:end)) % Flip vertically and exclude extra column
-xlabel('\alpha')
-ylabel('\beta')
+xlabel('Re(\nu)')
+ylabel('Im(\nu)')
 % Compose the title with variables
 title(sprintf('Lyapunov Exponent (fracNeg = %.3f)', fraction_negatives));
 
@@ -87,14 +83,3 @@ title(sprintf('Lyapunov Exponent (fracNeg = %.3f)', fraction_negatives));
 % Apply colormap and colorbar
 colormap(bluewhitered);
 
-%% Finding the sync solution
-function y = f_omega_aux(x,param)
-    omega = param.omega;
-    gamma = param.gamma;
-    lambda = param.lambda;
-    kmu = param.kmu;
-    tau = param.tau;
-
-    y = omega - gamma*(lambda + kmu*(cos(-x*tau) - 1))...
-	    + kmu*(sin(-x*tau)) - x;
-end
