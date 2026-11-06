@@ -14,14 +14,11 @@ gamma = 500;
 alpha0 = 5;       
 gamma_n = 0.5;    
 sigma0 = 3;       
-omega0 = 0;       
-epsilon = 0.1;    
+omega0 = 0;          
 tau = input('tau: '); 
-tau_tilde = 0;    
 J_0 = 4*gamma_n*(N_0-(gamma/g)); 
 M = 10; 
 dx = 0.95;
-neig = M;
 a = J_0/(gamma_n*(N_0+(gamma/g)));
 
 %%%%%--- Defining topology of coupling ---%%%%%
@@ -47,11 +44,9 @@ param.gamma = gamma;
 param.alpha0 = alpha0;       
 param.gamma_n = gamma_n;     
 param.sigma0 = sigma0;       
-param.omega0 = omega0;      
-param.epsilon = epsilon;   
+param.omega0 = omega0;        
 param.a = a;            
 param.tau = tau;  
-param.tau_tilde = tau_tilde;
 param.J_0 = J_0;
 param.M = M; 
 param.dx = dx;
@@ -119,8 +114,6 @@ figure();
 imagesc(mtle(end:-1:1, 1:end)) % Flip vertically and exclude extra column
 xlabel('Re(\nu)')
 ylabel('Im(\nu)')
-% Compose the title with variables
-title(sprintf('Lyapunov Exponent (\\indegree = %.3f, fracNeg = %.3f)', deg, fraction_negatives));
 
 
 % Apply colormap and colorbar
