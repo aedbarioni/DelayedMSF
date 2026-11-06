@@ -301,7 +301,7 @@ r = r0(1:M); Omega = r0(M+1); Delta = r0(M+2:2*M);
 found = 0;
 options = optimoptions('fsolve','Display','off','MaxIterations',1000,'MaxFunctionEvaluations',100000);
 for count = 1:10
-    		[sol,~,~,~] = fsolve(@(x)sync_freq_hetnet(x,param,adj_h),[r;Omega;Delta],options);
+    		[sol,~,~,~] = fsolve(@(x)sync_het_net(x,param,adj_h),[r;Omega;Delta],options);
 
             if norm(sol(1:M)-r)<sqrt(M)*1e-2 && abs(sol(M+1)- Omega)<0.2
                 found = 1;

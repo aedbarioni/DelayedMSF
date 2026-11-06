@@ -4,30 +4,24 @@
 lambda = 0.1;
 omega =  0.25; 
 gamma = -4.42; 
-K = 0.1;
 tau = input('tau: ');
 M = 5;
 a_max = 6;
 
 %%%%--- Defining the all-2-all network ---%%%%%
-adj = ones(M,M);
+adj = 0.1*ones(M,M);
 sum_deg = 0;
 for jjj = 1:M
     sum_deg = sum_deg + adj(1,jjj);
 end
-deg = sum_deg;
+d_star = sum_deg;
 
 %% Parameters vector
-mu = deg;
-kmu = K*mu;
 param.lambda = lambda;
 param.omega = omega;
 param.gamma = gamma;
-param.K = K;
 param.tau = tau;
-param.mu = mu;
-param.deg = mu;
-param.kmu = kmu;
+param.d_star = d_star;
 param.M = M;
 
 %%%%%--- Setting up the paralelizing ---%%%%%
@@ -42,7 +36,7 @@ f_omega = @(x) f_omega_aux(x,param);
 %% Fixed point
 Omega0 = fzero(f_omega,omega); % frequency of the sync solution
 phi = -Omega0*tau;
-r2 = lambda + kmu*(cos(phi) - 1); % square amplitude of the sync solution
+r2 = lambda + d_star*(cos(phi) - 1); % square amplitude of the sync solution
 r0 = sqrt(r2);
 
 r0_ini = zeros(2*M,1);
@@ -216,11 +210,8 @@ function [mtle,r0_new,adj_h] = ObjAdj_full(dif,adj0,r0,param)
 %        adj_h  ---- perturbed matrix
 
 lambda = param.lambda;      
-gamma = param.gamma;        
-K = param.K;          
-mu = param.mu;    
-deg = param.deg;        
-kmu = param.kmu;   
+gamma = param.gamma;           
+d_star = param.d_star;
 M = param.M;
 omega = param.omega;
 tau = param.tau;
@@ -235,7 +226,7 @@ tol = 1e-15;
 found = 0;
 options = optimoptions('fsolve','Display','off','MaxIterations',1000,'MaxFunctionEvaluations',100000);
 for count = 1:10
-    		[sol,~,~,~] = fsolve(@(x)limit_cycle_sol(x,omega,gamma,M,K,tau,lambda,kmu,adj_h),[r;Omega;Delta],options);
+    		[sol,~,~,~] = fsolve(@(x)limit_cycle_sol(x,omega,gamma,M,tau,lambda,d_star,adj_h),[r;Omega;Delta],options);
 
             if norm(sol(1:M)-r)<sqrt(M)*1e-1 && abs(sol(M+1)- Omega)<0.2
                 found = 1;
@@ -247,7 +238,7 @@ for count = 1:10
 end
 
 if found == 1 % sync state identified successfully
-    [J1,J2] = Jac_SLtau_hetnet(param,adj_h,r,Omega,delta,tau);
+    [J1,J2] = Jac_SL_hetnet(param,adj_h,r,Omega,delta,tau);
     mtle = dde_rightmost_eig(J1,J2,tau);
 else % no sync state found
     mtle = Inf;
@@ -283,11 +274,8 @@ function [mtle] = ObjAdj(dif,adj0,r0,param)
 
 lambda = param.lambda;      
 gamma = param.gamma;  
-omega = param.omega;
-K = param.K;          
-mu = param.mu;    
-deg = param.deg;        
-kmu = param.kmu;   
+omega = param.omega;   
+d_star = param.d_star;
 M = param.M; 
 tau = param.tau;
 
@@ -300,7 +288,7 @@ tol = 1e-15;
 found = 0;
 options = optimoptions('fsolve','Display','off','MaxIterations',1000,'MaxFunctionEvaluations',100000);
 for count = 1:10
-    		[sol,~,~,~] = fsolve(@(x)limit_cycle_sol(x,omega,gamma,M,K,tau,lambda,kmu,adj_h),[r;Omega;Delta],options);
+    		[sol,~,~,~] = fsolve(@(x)limit_cycle_sol(x,omega,gamma,M,tau,lambda,d_star,adj_h),[r;Omega;Delta],options);
 
             if norm(sol(1:M)-r)<sqrt(M)*1e-2 && abs(sol(M+1)- Omega)<0.2
                 found = 1;
@@ -308,19 +296,15 @@ for count = 1:10
                 break
             else
                 found = 2;
-            end
-%             found = 1;
-%             r = sol(1:M); Omega = sol(M+1); delta = [0;sol(M+2:2*M)]; 
+            end 
 end
 
 if found == 1 % sync state identified successfully
-    [J1,J2] = Jac_SLtau_hetnet(param,adj_h,r,Omega,delta,tau);
+    [J1,J2] = Jac_SL_hetnet(param,adj_h,r,Omega,delta,tau);
     mtle = dde_rightmost_eig(J1,J2,tau);
 else % no sync state found
     mtle = Inf;
 end
-
-% r0(1:M) = r; r0(M+1) = Omega; r0(M+2:2*M) = Delta;
 
 end
 
@@ -329,9 +313,23 @@ function y = f_omega_aux(x,param)
     omega = param.omega;
     gamma = param.gamma;
     lambda = param.lambda;
-    kmu = param.kmu;
+    d_star = param.d_star;
     tau = param.tau;
 
-    y = omega - gamma*(lambda + kmu*(cos(-x*tau) - 1))...
-	    + kmu*(sin(-x*tau)) - x;
+    y = omega - gamma*(lambda + d_star*(cos(-x*tau) - 1))...
+	    + d_star*(sin(-x*tau)) - x;
+end
+
+function y = limit_cycle_sol(x,w,gamma,n,tau,lambda,d_star,adj)
+%% frequency sync solution of nonidentical S-L oscillators
+y = zeros(2*n,1);
+for j = 1:n
+    if j == 1
+        y(j) = w - gamma*x(j)^2 + adj(j,:)*(x(1:n)/x(j).*sin([0;x(n+2:2*n)] - x(n+1)*tau)) - x(n+1);
+        y(n+j) = lambda + adj(j,:)*(x(1:n)/x(j).*cos([0;x(n+2:2*n)] - x(n+1)*tau)) - d_star - x(j)^2;
+    else
+        y(j) = w - gamma*x(j)^2 + adj(j,:)*(x(1:n)/x(j).*sin([0;x(n+2:2*n)] - x(n+j) - x(n+1)*tau)) - x(n+1);
+        y(n+j) = lambda + adj(j,:)*(x(1:n)/x(j).*cos([0;x(n+2:2*n)] - x(n+j) - x(n+1)*tau)) - d_star - x(j)^2;
+    end
+end
 end
