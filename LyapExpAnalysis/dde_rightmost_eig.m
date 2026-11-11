@@ -14,6 +14,14 @@ if tau~=0
     stability = stst_stabil_mod(J1,J2,tau,method);
     
     mtle = unique(max(real(stability.l1)));
+    if abs(mtle)<1e-4
+        stab_vec = stability.l1;
+        mtle_index = real(stab_vec)==mtle;
+        stab_vec(mtle_index) = [];
+        mtle = unique(max(real(stab_vec)));
+    end
+   
+    
     if any(size(mtle) == 0)
         mtle = unique(max(real(stability.l1)));
         if any(size(mtle) == 0)
@@ -25,15 +33,14 @@ end
 if tau == 0 
     e = eig(J1+J2);
     e_max = max(real(e));
-    % This part of the code disconsider a 0 eigenvalue (only keep for
-    % systems where this is needed)
-    % e_max_index = find(real(e)==e_max);
-    % if abs(e_max)<1e-4
-    %     e(e_max_index) = [];
-    %     e_max = max(real(e));
-    %     % e_max_index = find(abs(real(e)-e_max)<1e-4);
-    % end
-    % e_lambda = e(e_max_index);
-    % mtle = unique(real(e_lambda));
+    % This part of the code disconsider a 0 eigenvalue
+    e_max_index = find(real(e)==e_max);
+    if abs(e_max)<1e-4
+        e(e_max_index) = [];
+        e_max = max(real(e));
+        % e_max_index = find(abs(real(e)-e_max)<1e-4);
+    end
+    e_lambda = e(e_max_index);
+    e_max = unique(real(e_lambda));
     mtle = e_max;
 end
