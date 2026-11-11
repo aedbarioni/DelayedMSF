@@ -175,6 +175,20 @@ parfor jj = 1:trial
             break
         end
 
+        %% Add optionally to cap how much the stability can worsen at a given step 
+        % if (mtle - mtle_best)>1e-2
+        %     disp("stopping because the change is worse than the tolerance")
+        %     adj0 = adj_h;
+        %     r0 = r0_new;
+        %     mtle_best = mtle;
+        % 
+        %     mtle_best_v(jj,ii) = mtle_best;
+        %     adj_best_v{jj,ii} = adj0;
+        %     r0_best_v{jj,ii} = r0;
+        %     numSteps(jj) = ii;
+        %     break
+        % end
+
         adj0 = adj_h;
         r0 = r0_new;
         mtle_best = mtle;
@@ -197,6 +211,7 @@ runtime = toc
 
 %% Defining optimization constraints
 function [c, ceq] = constraints(x, sstep)
+    %% This is for the constrained weights scenario
     % Inequality constraints
     % The norm of the vector x should be less than or equal to eps
     c = norm(x) - sstep;
@@ -204,6 +219,25 @@ function [c, ceq] = constraints(x, sstep)
     % Equality constraints (ceq)f_omega
     % The sum of the entries of the vector x should be zero
     ceq = sum(x);
+    
+    %% This is for the unconstrained weights scenario
+    % Inequality constraints
+    % The norm of the vector x should be less than or equal to eps
+    c = norm(x) - sstep;
+    
+    % Tolerance for floating-point comparisons
+    tol = 1e-8;
+
+    % Adjust the inequality constraint to ensure non-negativity
+    adj_h = assemble_dif(x, adj0, M);
+    c_nonneg = -adj_h(:) + tol; % Ensure adj_h >= 0 by enforcing c <= 0 with a small tolerance
+
+    % Combine constraints
+    c = [c_norm; c_nonneg];
+
+    % No equality constraints
+    ceq = [];
+
 end
 
 %% Calculating Lyapunov exponent and new sync state for perturbed matrix
