@@ -210,7 +210,7 @@ save(filename)
 runtime = toc
 
 %% Defining optimization constraints
-function [c, ceq] = constraints(x, sstep)
+function [c, ceq] = constraints(x, adj0, M, sstep)
     %% This is for the constrained weights scenario
     % Inequality constraints
     % The norm of the vector x should be less than or equal to eps
@@ -223,7 +223,7 @@ function [c, ceq] = constraints(x, sstep)
     %% This is for the unconstrained weights scenario
     % Inequality constraints
     % The norm of the vector x should be less than or equal to eps
-    c = norm(x) - sstep;
+    c_norm = norm(x) - sstep;
     
     % Tolerance for floating-point comparisons
     tol = 1e-8;
