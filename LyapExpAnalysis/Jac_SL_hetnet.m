@@ -22,11 +22,11 @@ for kk = 1:M
         
     
     for kkk=1:M
-        J2(kk,kkk) = adj(kk,kkk)*cos(phase_lag(kkk)-phase_lag(kk) + phi);                       % (\partial F1)/(\partial r)
-        J2(kk,kkk+M) = -adj(kk,kkk)*r(kkk)*sin(phase_lag(kkk)-phase_lag(kk) + phi);             % (\partial F1)/(\partial phi)
+        J2(kk,kkk) = adj(kk,kkk)*cos(phase_lag(kkk)-phase_lag(kk) - phi);                       % (\partial F1)/(\partial r)
+        J2(kk,kkk+M) = -adj(kk,kkk)*r(kkk)*sin(phase_lag(kkk)-phase_lag(kk) - phi);             % (\partial F1)/(\partial phi)
 
-        J2(kk+M,kkk) = adj(kk,kkk)*(1/r(kk))*sin(phase_lag(kkk)-phase_lag(kk) + phi);                       % (\partial F2)/(\partial r)
-        J2(kk+M,kkk+M) = adj(kk,kkk)*(r(kkk)/r(kk))*cos(phase_lag(kkk)-phase_lag(kk) + phi);              % (\partial F2)/(\partial phi)
+        J2(kk+M,kkk) = adj(kk,kkk)*(1/r(kk))*sin(phase_lag(kkk)-phase_lag(kk) - phi);                       % (\partial F2)/(\partial r)
+        J2(kk+M,kkk+M) = adj(kk,kkk)*(r(kkk)/r(kk))*cos(phase_lag(kkk)-phase_lag(kk) - phi);              % (\partial F2)/(\partial phi)
     end            
 end
 
