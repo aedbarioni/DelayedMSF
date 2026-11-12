@@ -17,11 +17,14 @@ if tau~=0
     if abs(mtle)<1e-4
         stab_vec = stability.l1;
         mtle_index = real(stab_vec)==mtle;
+        if numel(mtle_index)>1
+            mtle_index = min(mtle_index);
+        end
         stab_vec(mtle_index) = [];
         mtle = unique(max(real(stab_vec)));
     end
    
-    
+
     if any(size(mtle) == 0)
         mtle = unique(max(real(stability.l1)));
         if any(size(mtle) == 0)
